@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { db, query } = require("./config/database")
 
-const { authRoutes } = require('./routes');
+const { authRoutes, productRoutes } = require('./routes');
 
 const app = express();
 require('dotenv').config();
@@ -13,10 +13,7 @@ app.use(cors());
 
 // Use the imported routes
 app.use('/auth', authRoutes);
-// app.use('/categories', categoryRoutes);
-// app.use('/products', productRoutes);
-// app.use('/transactions', transactionRoutes);
-// app.use('/reports', reportRoutes);
+app.use('/products', productRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

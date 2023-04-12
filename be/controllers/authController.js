@@ -1,6 +1,6 @@
 const { db, query } = require("../config/database");
 const bcrypt = require('bcrypt')
-
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   register: async (req, res) => {
@@ -32,7 +32,35 @@ module.exports = {
 
       let addUserResult = await query(addUserQuery)
 
-      return res.status(200).send({data: addUserResult, message: "Register success" })
+      return res.status(200).send({ data: addUserResult, message: "Register success" })
+
+    } catch (error) {
+      return res.status(500).send({ message: "Error", error })
+    }
+  },
+  login: async (req, res) => {
+    const { email, password } = req.body
+
+    try {
+      // Cek apakah email ada di database
+      let getEmailQuery = `select * from users where email = ${db.escape(email)}`
+      const user = await query(getEmailQuery)
+      if (user.length === 0) {
+        return res.status(400).send({ message: "Email or Password is Invalid", success: false })
+      }
+
+      // Bandingkan password yang dimasukkan dengan password yang disimpan di database
+      const isPasswordValid = await bcrypt.compare(password, user[0].password)
+      if (!isPasswordValid) {
+        return res.status(400).send({ message: "Password is wrong", success: false })
+      }
+
+      // Buat token dengan JWT
+      const payload = { id: user[0].id, name: user[0].name }
+      const token = jwt.sign(payload, 'team10_token', { expiresIn: '1h' })
+
+       // Kirim token ke client
+      return res.status(200).send({ message: "Login success", token })
 
     } catch (error) {
       return res.status(500).send({ message: "Error", error })
