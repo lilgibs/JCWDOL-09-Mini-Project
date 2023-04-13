@@ -1,10 +1,11 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from 'axios'
 // import { useDispatch } from "react-redux";
 
 function Register() {
-  //   const dispatch = useDispatch();
+  
 
   const LoginSchema = Yup.object().shape({
     name: Yup.string().required("Nama tidak boleh kosong"),
@@ -17,6 +18,18 @@ function Register() {
       .min(8, "Password haris lebih dari 8 karakter")
       .required("Password tidak boleh kosong"),
   });
+
+  const registerUser = async (values) => {
+    try {
+      // console.log(values)
+      const response = await axios.post('http://localhost:5500/auth/register', values)
+      console.log(response.data)
+      alert(response.data.message)
+    } catch (error) {
+      console.log(error.response.data)
+    }
+  }
+
   return (
     <div>
       <Formik
@@ -28,8 +41,8 @@ function Register() {
           password: "",
         }}
         validationSchema={LoginSchema}
-        onSubmit={(value) => {
-          // alert("testing");
+        onSubmit={(values) => {
+          registerUser(values)
         }}
       >
         {(props) => {
