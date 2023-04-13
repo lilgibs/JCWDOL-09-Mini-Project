@@ -6,13 +6,13 @@ module.exports = {
   register: async (req, res) => {
     const { username, email, phone, name, password } = req.body
     try {
-      let getUsernameQuery = `SELECT * FROM users WHERE username=${db.escape(username)}`
+      let getUsernameQuery = `SELECT * FROM users WHERE username = ${db.escape(username)}`
       let isUsernameExist = await query(getUsernameQuery)
       if (isUsernameExist.length > 0) {
         return res.status(200).send({ message: 'Username has been used' })
       }
 
-      let getEmailQuery = `SELECT * FROM users WHERE email=${db.escape(email)}`
+      let getEmailQuery = `SELECT * FROM users WHERE email = ${db.escape(email)}`
       let isEmailExist = await query(getEmailQuery)
       if (isEmailExist.length > 0) {
         return res.status(200).send({ message: 'Email has been used' })
@@ -27,7 +27,7 @@ module.exports = {
         ${db.escape(email)}, 
         ${db.escape(phone)}, 
         ${db.escape(name)}, 
-        ${db.escape(hashPassword)}, 
+        ${db.escape(hashPassword)}
         )`
 
       let addUserResult = await query(addUserQuery)
@@ -56,14 +56,44 @@ module.exports = {
       }
 
       // Buat token dengan JWT
-      const payload = { id: user[0].id, name: user[0].name }
-      const token = jwt.sign(payload, 'team10_token', { expiresIn: '1h' })
+      const payload = {
+        id: user[0].id,
+        // name: user[0].name 
+      }
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1m' })
 
-       // Kirim token ke client
-      return res.status(200).send({ message: "Login success", token })
+      // Kirim token ke client
+      return res.status(200).send({
+        data: {
+          id: user[0].id,
+          username: user[0].username,
+          email: user[0].email,
+          phone: user[0].phone,
+          name: user[0].name,
+        },
+        message: "Login success",
+        token
+      })
 
     } catch (error) {
       return res.status(500).send({ message: "Error", error })
     }
-  }
+  },
+  checkLogin: async (req, res) => {
+    try {
+      const user = await query(`SELECT * FROM users WHERE id = ${db.escape(req.user.id)}`)
+      return res.status(200).send({
+        data: {
+          id: user[0].id,
+          username: user[0].username,
+          email: user[0].email,
+          phone: user[0].phone,
+          name: user[0].name,
+        }
+      })
+
+    } catch (error) {
+      res.status(error.status || 500).send(error)
+    }
+  },
 }
