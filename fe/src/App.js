@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { checkLogin } from "./features/user/userSlice";
+import { Navbar } from "./components/";
 
 function App() {
   const dispatch = useDispatch()
@@ -17,6 +18,8 @@ function App() {
 
   return (
     <div>
+      <Navbar/>
+
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
