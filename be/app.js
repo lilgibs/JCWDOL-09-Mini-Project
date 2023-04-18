@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const { authRoutes, productRoutes } = require('./routes');
+const { authRoutes, productRoutes, categoryRoutes } = require('./routes');
 
 const app = express();
 require('dotenv').config();
@@ -13,6 +13,7 @@ app.use(cors());
 // Use the imported routes
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
+app.use('/categories', categoryRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
