@@ -9,6 +9,16 @@ module.exports = {
       res.status(500).json({ message: 'Error', error });
     }
   },
+  
+  getAllCategoriesUser: async (req, res) => {
+    const id  = req.user.id
+    try {
+      const categories = await query(`select * from categories where id_user = ${db.escape(id)} `);
+      res.status(200).send({ data: categories });
+    } catch (error) {
+      res.status(500).json({ message: 'Error', error });
+    }
+  },
 
   getCategoryById: async (req, res) => {
     try {
