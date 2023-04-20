@@ -9,7 +9,6 @@ const Navbar = () => {
 
   const userGlobal = useSelector(state => state.user.user)
 
-
   const handleClick = () => {
     setToggle(!toggle);
   }
