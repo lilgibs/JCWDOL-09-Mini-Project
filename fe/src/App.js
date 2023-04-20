@@ -6,6 +6,9 @@ import Login from "./pages/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { checkLogin } from "./features/user/userSlice";
 import { Navbar } from "./components/";
+import Dashboard from "./pages/Dashboard";
+import LandingPage from "./pages/LandingPage";
+import Products from "./pages/Products";
 
 function App() {
   const dispatch = useDispatch()
@@ -18,11 +21,12 @@ function App() {
 
   return (
     <div>
-      <Navbar/>
-
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/products" element={<Products />} />
       </Routes>
     </div>
   );
