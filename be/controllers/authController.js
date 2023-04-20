@@ -60,7 +60,7 @@ module.exports = {
         id: user[0].id,
         // name: user[0].name 
       }
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1m' })
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10h' })
 
       // Kirim token ke client
       return res.status(200).send({

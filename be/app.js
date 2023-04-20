@@ -14,6 +14,7 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes);
+app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
