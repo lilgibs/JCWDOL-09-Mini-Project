@@ -5,7 +5,7 @@ import { faHouse, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 function Sidebar({ setSelectedComponent }) {
   return (
-    <div className="bg-gray-100 min-h-screen h-full p-4 flex flex-col justify-between">
+    <div className="bg-gray-100 min-h-screen h-full p-4 flex flex-col justify-between w-60">
       <div>
         <ul className="space-y-2">
           <li>

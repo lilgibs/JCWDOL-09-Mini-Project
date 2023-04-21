@@ -22,22 +22,23 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex ">
+      <div className="flex">
         <Sidebar setSelectedComponent={setSelectedComponent} />
 
+        {selectedComponent === 'products' ? (
+          <div className='flex w-full flex-col items-center'>
+            <h2 className="text-2xl font-bold mt-8 mb-4">Produk Saya</h2>
+            <UserProductTable />
+          </div>
+        ) : null}
+
         {selectedComponent === 'addProduct' ? (
-          <div>
-            <h1 className="text-center text-2xl font-bold mt-8 mb-4">Tambah Produk</h1>
+          <div className='flex w-full flex-col items-center'>
+            <h1 className="text-2xl font-bold mt-8 mb-4">Tambah Produk</h1>
             <UserAddProduct />
           </div>
         ) : null}
 
-        {selectedComponent === 'products' ? (
-          <div>
-            <h2 className="text-center text-xl font-bold mt-8 mb-4">Produk Saya</h2>
-            <UserProductTable />
-          </div>
-        ) : null}
 
       </div>
     </>
