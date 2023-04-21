@@ -57,6 +57,8 @@ function Filter({ onFilterChange }) {
           <option value="">Default</option>
           <option value="price_high_to_low">Harga tertinggi</option>
           <option value="price_low_to_high">Harga terendah</option>
+          <option value="name_a_to_z">Nama A - Z</option>
+          <option value="name_z_to_a">Nama Z - A</option>
         </select>
       </div>
       <div>
