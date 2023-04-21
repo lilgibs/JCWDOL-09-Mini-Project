@@ -22,11 +22,11 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/" element={<LandingPage />} /> */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/" element={<Products />} />
       </Routes>
     </div>
   );

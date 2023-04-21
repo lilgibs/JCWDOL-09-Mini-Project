@@ -36,9 +36,11 @@ module.exports = {
 
 			const products = await query(sql);
 
-			const count = await query(
-				`SELECT COUNT(*) as total FROM products WHERE active = 1 ${id_category ? `AND id_category = ${db.escape(id_category)}` : ""
-				}`
+			const count = await query(`
+				SELECT COUNT(*) as total 
+				FROM products 
+				WHERE active = 1 
+				${id_category ? `AND id_category = ${db.escape(id_category)}` : ""}`
 			);
 			const total = count[0].total;
 
@@ -51,25 +53,25 @@ module.exports = {
 		const id = req.user.id;
 		try {
 			const products = await query(`
-		SELECT 
-			products.id AS product_id,
-			products.name AS product_name,
-			products.price,
-			products.image,
-			products.description,
-			products.active,
-			categories.id as category_id,
-			categories.name AS category_name,
-			categories.id_user
-    	FROM
-        	products
-    	JOIN
-	   		categories
-    	ON
-        	products.id_user = categories.id_user
-    	WHERE 
-      		products.id_user = ${db.escape(id)};
-        `);
+				SELECT 
+					products.id AS product_id,
+					products.name AS product_name,
+					products.price,
+					products.image,
+					products.description,
+					products.active,
+					categories.id as category_id,
+					categories.name AS category_name,
+					categories.id_user
+					FROM
+							products
+					JOIN
+						categories
+					ON
+							products.id_user = categories.id_user
+					WHERE 
+							products.id_user = ${db.escape(id)};
+      `);
 
 			if (products.length === 0) {
 				res.status(200).send({ message: "Tidak ada produk" });
@@ -130,7 +132,7 @@ module.exports = {
 					1,
 					${db.escape(idUser)}
 				)
-      		`);
+      `);
 			res.status(200).send({ data: products });
 		} catch (error) {
 			res.status(500).json({ message: "Error", error });
@@ -157,18 +159,18 @@ module.exports = {
 
 			const result = await query(sql)
 
-			if(result.affectedRows === 0){
+			if (result.affectedRows === 0) {
 				res.status(404).send({ message: "Produk tidak ditemukan atau Anda tidak memiliki izin untuk mengedit produk ini." });
-			}else{
+			} else {
 				res.status(200).send({ message: "Produk berhasil diperbarui" });
 			}
 		}
 
-		catch(error) {
+		catch (error) {
 			res.status(500).json({ message: "Error", error });
 		}
 	},
-	deleteProduct : async(req,res) => {
+	deleteProduct: async (req, res) => {
 		const idUser = req.user.id
 		const productId = req.params.id
 		try {
@@ -178,7 +180,7 @@ module.exports = {
 
 			res.status(200).send({ message: "Produk berhasil di hapus", result });
 		} catch (error) {
-			res.status(500).json({ message: "Error", error });	
+			res.status(500).json({ message: "Error", error });
 		}
 	}
 };
