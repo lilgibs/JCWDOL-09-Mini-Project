@@ -13,7 +13,7 @@ function Sidebar({ setSelectedComponent }) {
               onClick={() => setSelectedComponent('products')}
               className="block px-4 py-2 rounded hover:bg-gray-200 w-full text-left"
             >
-              Produk Saya
+              Produk
             </button>
           </li>
           <li>
@@ -25,9 +25,11 @@ function Sidebar({ setSelectedComponent }) {
             </button>
           </li>
           <li>
-            <a href="#" className="block px-4 py-2 rounded hover:bg-gray-200">
-              Pengaturan
-            </a>
+            <button
+              onClick={() => setSelectedComponent('categories')}
+              className="block px-4 py-2 rounded hover:bg-gray-200">
+              Kategori
+            </button>
           </li>
         </ul>
       </div>
