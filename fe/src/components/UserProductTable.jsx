@@ -49,11 +49,11 @@ function UserProductTable() {
     }
   }
 
-  const deleteProduct = async(productId) => {
+  const deleteProduct = async (productId) => {
     try {
-      const response = await axios.delete(`http://localhost:5500/products/user/${productId}`,{
+      const response = await axios.delete(`http://localhost:5500/products/user/${productId}`, {
         headers: {
-          Authorization : `Bearer ${userToken}`
+          Authorization: `Bearer ${userToken}`
         }
       })
       console.log(response)
@@ -69,41 +69,40 @@ function UserProductTable() {
 
 
   return (
-    <div className="flex mx-auto">
-      <div className="flex-1 ml-5">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Nama Produk</th>
-              <th className="border border-gray-300 p-2">Harga</th>
-              <th className="border border-gray-300 p-2">Gambar</th>
-              <th className="border border-gray-300 p-2">Deskripsi</th>
-              <th className="border border-gray-300 p-2">Status</th>
-              <th className="border border-gray-300 p-2">Kategori</th>
-              <th colSpan='2' className="border border-gray-300 p-2">Aksi</th>
-            </tr>
-          </thead>
+    <div className="container mx-auto px-4 mt-8">
+      <h2 className="text-2xl font-bold mb-6">Produk</h2>
+      <table className="w-full table-auto border-collapse border border-gray-300 text-center">
+        <thead>
+          <tr>
+            <th className="border border-gray-300 p-2">Nama Produk</th>
+            <th className="border border-gray-300 p-2">Harga</th>
+            <th className="border border-gray-300 p-2">Gambar</th>
+            <th className="border border-gray-300 p-2">Deskripsi</th>
+            <th className="border border-gray-300 p-2">Status</th>
+            <th className="border border-gray-300 p-2">Kategori</th>
+            <th className="border border-gray-300 p-2">Aksi</th>
+          </tr>
+        </thead>
+        {userProducts && userProducts.length > 0 ? (
           <tbody>
-            {userProducts.map((product) => (
-              <tr key={product.product_id}>
+            {userProducts.map((product, index) => (
+              <tr key={product.product_id} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
                 <td className="border border-gray-300 p-2">{product.product_name}</td>
                 <td className="border border-gray-300 p-2">{product.price}</td>
                 <td className="border border-gray-300 p-2">{product.image}</td>
                 <td className="border border-gray-300 p-2">{product.description}</td>
-                <td className="border border-gray-300 p-2">{product.active ? "Aktif" : "Tidak Aktif"}</td>
+                <td className="border border-gray-300 p-2">{product.active ? 'Aktif' : 'Tidak Aktif'}</td>
                 <td className="border border-gray-300 p-2">{product.category_name}</td>
                 <td className="border border-gray-300 p-2">
                   <button
                     onClick={() => handleEditClick(product)}
-                    className=' bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600'
+                    className="bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600 mr-2"
                   >
                     Edit
                   </button>
-                </td>
-                <td className="border border-gray-300 p-2">
                   <button
                     onClick={() => deleteProduct(product.product_id)}
-                    className=' bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600'
+                    className="bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600"
                   >
                     Delete
                   </button>
@@ -111,11 +110,13 @@ function UserProductTable() {
               </tr>
             ))}
           </tbody>
-        </table>
-        <UserProductEditModal isOpen={isOpen} onClose={onClose} product={productToEdit} onUpdate={updateProduct} />
-      </div>
+        ) : (
+          null
+        )}
+      </table>
+      <UserProductEditModal isOpen={isOpen} onClose={onClose} product={productToEdit} onUpdate={updateProduct} />
     </div>
-  )
+  );
 }
 
 export default UserProductTable

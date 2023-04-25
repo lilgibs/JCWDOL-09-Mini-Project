@@ -101,7 +101,7 @@ module.exports = {
 				JOIN
 					categories
 				ON
-					products.id_user = categories.id_user
+					products.id_category = categories.id
 				WHERE 
 					products.id_user = ${db.escape(id)};
 			`);
