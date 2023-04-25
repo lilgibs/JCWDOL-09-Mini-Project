@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components';
 import UserProductTable from '../components/UserProductTable';
 import UserAddProduct from '../components/UserAddProduct';
+import UserCategory from '../components/UserCategories';
+import UserCategories from '../components/UserCategories';
 
 function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState('products');
@@ -39,7 +41,13 @@ function Dashboard() {
           </div>
         ) : null}
 
-
+        {selectedComponent === 'categories' ? (
+          <div className='flex w-full flex-col items-center'>
+            <h1 className="text-2xl font-bold mt-8 mb-4">Kategori Saya</h1>
+            <UserCategories />
+          </div>
+        ) : null}
+        
       </div>
     </>
   );

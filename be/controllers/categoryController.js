@@ -11,7 +11,7 @@ module.exports = {
   },
   
   getAllCategoriesUser: async (req, res) => {
-    const id  = req.user.id
+    const id = req.user.id
     try {
       const categories = await query(`select * from categories where id_user = ${db.escape(id)} `);
       res.status(200).send({ data: categories });
@@ -33,10 +33,17 @@ module.exports = {
   },
 
   createCategory: async (req, res) => {
+    const idUser = req.user.id
     try {
-      const newCategory = new Category(req.body);
-      await newCategory.save();
-      res.status(201).send({ data: newCategory });
+      const categories = await query(`
+        INSERT into categories (id, name , id_user)
+        VALUES (
+          null,
+          ${db.escape(req.body.name)},
+          ${db.escape(idUser)}
+        )
+      `)
+      res.status(201).send({ data: categories });
     } catch (error) {
       res.status(500).json({ message: 'Error', error });
     }
