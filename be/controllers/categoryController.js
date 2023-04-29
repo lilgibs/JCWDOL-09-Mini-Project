@@ -9,7 +9,7 @@ module.exports = {
       res.status(500).json({ message: 'Error', error });
     }
   },
-  
+
   getAllCategoriesUser: async (req, res) => {
     const id = req.user.id
     try {
@@ -20,23 +20,11 @@ module.exports = {
     }
   },
 
-  getCategoryById: async (req, res) => {
-    try {
-      const category = await Category.findById(req.params.id);
-      if (!category) {
-        return res.status(404).json({ message: 'Category not found' });
-      }
-      res.status(200).send({ data: category });
-    } catch (error) {
-      res.status(500).json({ message: 'Error', error });
-    }
-  },
-
   createCategory: async (req, res) => {
     const idUser = req.user.id
     try {
       const categories = await query(`
-        INSERT into categories (id, name , id_user)
+        INSERT into categories (id, name, id_user)
         VALUES (
           null,
           ${db.escape(req.body.name)},
@@ -50,21 +38,35 @@ module.exports = {
   },
 
   updateCategory: async (req, res) => {
+    const userId = req.user.id
+    const catId = req.params.id
     try {
-      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (!updatedCategory) {
+      const updatedCategory = await query(`
+        UPDATE categories
+        SET 
+          name = ${db.escape(req.body.name)}
+        WHERE 
+          id = ${db.escape(catId)} AND id_user = ${db.escape(userId)} 
+      `);
+      if (updatedCategory.affectedRows === 0) {
         return res.status(404).json({ message: 'Category not found' });
       }
-      res.status(200).send({ data: updatedCategory });
+      res.status(200).json({ data: updatedCategory, message: 'Category updated successfully'  });
     } catch (error) {
       res.status(500).json({ message: 'Error', error });
     }
   },
 
   deleteCategory: async (req, res) => {
+    const userId = req.user.id
+    const catId = req.params.id
     try {
-      const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-      if (!deletedCategory) {
+      const deletedCategory = await query(`
+        DELETE from categories
+        WHERE
+          id = ${db.escape(catId)} AND id_user = ${db.escape(userId)}
+      `);
+      if (deletedCategory.affectedRows === 0) {
         return res.status(404).json({ message: 'Category not found' });
       }
       res.status(200).send({ message: 'Category deleted', data: deletedCategory });
