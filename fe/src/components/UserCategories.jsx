@@ -1,9 +1,13 @@
+import { useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import UserCategoryEditModal from './UserCategoryEditModal';
 
 function UserCategories() {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [categoryToEdit, setCategoryToEdit] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const userToken = localStorage.getItem('user_token');
 
@@ -15,11 +19,48 @@ function UserCategories() {
     });
     console.log(response.data.data);
     setCategories(response.data.data);
+    console.log(categoryToEdit)
+  };
+
+  const handleEditClick = (category) => {
+    setCategoryToEdit(category);
+    onOpen()
+  }
+
+  const updateCategory = async (updatedCategory) => {
+    try {
+      let response = await axios.patch(
+        `http://localhost:5500/categories/user/${updatedCategory.id}`,
+        updatedCategory,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+      fetchCategories();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const categoryDelete = async (categoryId) => {
+    try {
+      await axios.delete(`http://localhost:5500/categories/user/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      fetchCategories();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     try {
       const response = await axios.post(
         'http://localhost:5500/categories',
@@ -37,89 +78,62 @@ function UserCategories() {
     }
   };
 
-  const handleDelete = async (categoryId) => {
-    try {
-      await axios.delete(`http://localhost:5500/categories/${categoryId}`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
-
-      setCategories(categories.filter((cat) => cat.id !== categoryId));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchCategories();
   }, []);
 
   return (
     <>
-      <div className="flex flex-col mx-auto">
-        <div className="flex-1 ml-5">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2"></th>
-                <th className="border border-gray-300 p-2">Nama Kategori</th>
-                <th colSpan="2" className="border border-gray-300 p-2">
-                  Aksi
-                </th>
+      <div className="container mx-auto px-4 mt-8">
+        <h2 className="text-2xl font-bold mb-6">Kategori</h2>
+        <table className="w-full table-auto border-collapse border text-center border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2">No</th>
+              <th className="border border-gray-300 p-2">Nama Kategori</th>
+              <th className="border border-gray-300 p-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <tr key={category.id} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+                <td className="border border-gray-300 p-2">{index + 1}</td>
+                <td className="border border-gray-300 p-2">{category.name}</td>
+                <td className="border border-gray-300 p-2">
+                  <button
+                    className="bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600 mr-2"
+                    onClick={() => handleEditClick(category)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => categoryDelete(category.id)}
+                    className="bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {categories.map((cat) => (
-                <tr key={cat.id}>
-                  <td></td>
-                  <td className="border border-gray-300 p-2">{cat.name}</td>
-                  <td className="border border-gray-300 p-2">
-                    <button
-                      className="bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <button
-                      onClick={() => handleDelete(cat.id)}
-                      className="bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* FORM ADD CATEGORY */}
-        <div className="flex flex-row w-full max-w-md mx-auto mt-8">
+            ))}
+          </tbody>
+        </table>
+        <UserCategoryEditModal isOpen={isOpen} onClose={onClose} category={categoryToEdit} onUpdate={updateCategory} />
+        <div className="mt-8">
+          <h2 className="text-lg font-bold mb-4">Tambah Kategori</h2>
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-row">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="category-name"
-              >
-                Nama Kategori
-              </label>
+            <div className="flex">
               <input
-                className="shadow appearance-none border rounded w-full    py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="category-name"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 placeholder="Nama Kategori"
               />
-            </div>
-            <div className="flex items-center justify-between">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2"
                 type="submit"
               >
-                Tambah Kategori
+                Tambah
               </button>
             </div>
           </form>
