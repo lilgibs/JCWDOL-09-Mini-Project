@@ -1,5 +1,16 @@
 const { db, query } = require("../config/database");
 const { getAllCategories } = require("./categoryController");
+const fs = require('fs')
+
+const deleteImage = (path) => {
+	fs.unlink(path, (err) => {
+		if (err) {
+			console.log("Failed to delete image :", err)
+		} else {
+			console.log("Image deleted", path)
+		}
+	})
+}
 
 module.exports = {
 	getAllProducts: async (req, res) => {
@@ -144,6 +155,17 @@ module.exports = {
 		const { product_name, price, description, category_id, active, category_name } = req.body;
 		const image = req.file ? req.file.path : null;
 		try {
+			// Delete image lama
+			const oldProduct = await query(`
+				SELECT image
+				FROM products
+				WHERE 
+					id = ${db.escape(productId)} AND id_user = ${db.escape(idUser)}
+			`)
+			if (image && oldProduct.length > 0) {
+				deleteImage(oldProduct[0].image)
+			}
+
 			let sql = `
 				UPDATE products
 				SET
@@ -174,6 +196,16 @@ module.exports = {
 		const idUser = req.user.id
 		const productId = req.params.id
 		try {
+			const oldProduct = await query(`
+				SELECT image
+				FROM products
+				WHERE 
+					id = ${db.escape(productId)} AND id_user = ${db.escape(idUser)}
+			`)
+			if (oldProduct.length > 0) {
+				deleteImage(oldProduct[0].image)
+			}
+			
 			sql = `DELETE from products where id = ${db.escape(productId)} AND id_user = ${db.escape(idUser)}`
 
 			const result = await query(sql)

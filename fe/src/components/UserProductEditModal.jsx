@@ -20,9 +20,9 @@ function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
   // Perbarui state saat input berubah
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    if (name === 'image'){
-      setUpdatedProduct({...updatedProduct, [name] : e.target.files[0]})
-    }else{
+    if (name === 'image') {
+      setUpdatedProduct({ ...updatedProduct, [name]: e.target.files[0] })
+    } else {
       setUpdatedProduct({ ...updatedProduct, [name]: value })
     }
   }
@@ -32,10 +32,10 @@ function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
     try {
       // Deklarasi FormData object
       const formData = new FormData()
-      
+
       // Append form data ke FormData object
       Object.entries(updatedProduct).forEach(([key, value]) => {
-        formData.append(key,value)
+        formData.append(key, value)
       })
 
       // Panggil fungsi onUpdate untuk mengirim data yang diperbarui
@@ -78,9 +78,9 @@ function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
               <FormControl mt={4}>
                 <FormLabel>Image</FormLabel>
                 <Input
-                 type="file"
-                 name="image"
-                 onChange={handleInputChange}
+                  type="file"
+                  name="image"
+                  onChange={handleInputChange}
                 />
               </FormControl>
               <FormControl mt={4}>
