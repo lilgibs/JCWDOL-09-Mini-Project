@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, removeFromCart } from '../features/cart/cartSlice';
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const dispatch = useDispatch();
@@ -58,6 +59,16 @@ function Cart() {
             </div>
           </div>
         ))}
+      </div>
+      <div className='flex justify-center'>
+        <Link to="/checkout">
+          <button
+            className="bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 mt-6"
+            disabled={cartItems.length === 0}
+          >
+            Proceed to Checkout
+          </button>
+        </Link>
       </div>
     </div>
   )

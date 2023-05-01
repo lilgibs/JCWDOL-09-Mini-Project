@@ -27,11 +27,14 @@ const cartSlice = createSlice({
       state.items = state.items.filter(
         item => item.id_product !== action.payload
       )
-    }
+    },
+    clearCart: (state) => {
+      state.items = [];
+    },
   },
 });
 
-const { setCarts, addOrUpdateItem, removeItem } = cartSlice.actions;
+const { setCarts, addOrUpdateItem, removeItem, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
 export function fetchCart() {
@@ -79,6 +82,24 @@ export function removeFromCart(productId) {
       });
       console.log(response);
       dispatch(removeItem(productId));
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export function checkout(orderData) {
+  return async (dispatch) => {
+    try {
+      const token = localStorage.getItem("user_token");
+
+      let response = await axios.post(`http://localhost:5500/checkout`, orderData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log(response);
+      dispatch(clearCart());
     } catch (error) {
       console.log(error)
     }
