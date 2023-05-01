@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import { fetchCart } from "./features/cart/cartSlice";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const dispatch = useDispatch()
@@ -31,6 +32,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </div>
   );
