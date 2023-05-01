@@ -2,16 +2,27 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCart } from '../features/cart/cartSlice';
+import { useEffect } from 'react';
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false)
 
   const userGlobal = useSelector(state => state.user.user)
+  const cartsGlobal = useSelector(state => state.cart.items)
+  const dispatch = useDispatch()
+
 
   const handleClick = () => {
     setToggle(!toggle);
+
   }
+
+  useEffect(() => {
+    dispatch(fetchCart())
+  }, [])
+
 
   return (
     <div className='w-full h-14 bg-white border-b shadow-md'>
@@ -41,12 +52,15 @@ const Navbar = () => {
               </Link>
             </div>
             :
-            <div className='flex flex-row items-center'>
-              <img
-                src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-                className='w-10 object-cover border border-gray-500 rounded-full cursor-pointer' />
-              <p>{userGlobal.name}</p>
-            </div>
+            <>
+              <div className='flex flex-row items-center gap-2'>
+                <p>Cart {cartsGlobal.length}</p>
+                <img
+                  src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+                  className='w-8 object-cover border border-gray-500 rounded-full cursor-pointer' />
+                <p>{userGlobal.name}</p>
+              </div>
+            </>
         }
 
         <div className='md:hidden cursor-pointer' onClick={handleClick}>
