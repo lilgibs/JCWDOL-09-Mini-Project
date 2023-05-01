@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, ButtonGroup, Divider, Image } from '@chakra-ui/react'
 import { Filter, Navbar } from "../components";
+import { useDispatch } from "react-redux";
+import { addToCart, fetchCart } from "../features/cart/cartSlice";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -11,7 +13,8 @@ function Products() {
   const [idCategory, setIdCategory] = useState(null);
   const [sortBy, setSortBy] = useState(null);
 
-  
+  const dispatch = useDispatch();
+
   const handleFilterChange = ({ category, sortOrder }) => {
     setIdCategory(category);
     setSortBy(sortOrder);
@@ -21,19 +24,19 @@ function Products() {
   const fetchProducts = async () => {
     let url = `http://localhost:5500/products?page=${page}&limit=${limit}`;
 
-    if(idCategory){
-      url+= `&id_category=${idCategory}`
+    if (idCategory) {
+      url += `&id_category=${idCategory}`
     }
 
-    if(sortBy){
-      url+= `&sortBy=${sortBy}`
+    if (sortBy) {
+      url += `&sortBy=${sortBy}`
     }
 
     let response = await axios.get(url)
-    
+
     console.log(response);
     setProducts(response.data.data);
-    setMaxPage(Math.ceil(response.data.total/limit))
+    setMaxPage(Math.ceil(response.data.total / limit))
   };
 
   const renderProducts = () => {
@@ -49,7 +52,7 @@ function Products() {
             <Stack mt='6' spacing='3'>
               <Heading size='md'>{product.name}</Heading>
               <Text>
-               {product.description}
+                {product.description}
               </Text>
               <Text color='blue.600' fontSize='2xl'>
                 Rp. {product.price}
@@ -62,7 +65,11 @@ function Products() {
               <button className="bg-emerald-500 text-white p-2 rounded-md font-semibold hover:bg-emerald-600">
                 Buy now
               </button>
-              <Button variant='ghost' colorScheme='blue'>
+              <Button
+                variant='ghost'
+                colorScheme='blue'
+                onClick={() => handleAddTocart(product)}
+              >
                 Add to cart
               </Button>
             </ButtonGroup>
@@ -100,21 +107,31 @@ function Products() {
     );
   };
 
+  const handleAddTocart = (product) => {
+    dispatch(addToCart({
+      productId: product.id,
+      quantity: 1,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    }))
+  }
+
   useEffect(() => {
     fetchProducts();
   }, [page, idCategory, sortBy]);
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <Filter onFilterChange={handleFilterChange} />
-    <div className="flex justify-center mt-3">
-      <SimpleGrid spacing={4} templateColumns='repeat(3, minmax(250px, 1fr))'>
-        {renderProducts()}
-      </SimpleGrid>
+      <div className="flex justify-center mt-3">
+        <SimpleGrid spacing={4} templateColumns='repeat(3, minmax(250px, 1fr))'>
+          {renderProducts()}
+        </SimpleGrid>
 
-    </div>
-    {renderPagination()}
+      </div>
+      {renderPagination()}
     </>
   );
 }

@@ -9,6 +9,8 @@ import { Navbar } from "./components/";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import Products from "./pages/Products";
+import Cart from "./pages/Cart";
+import { fetchCart } from "./features/cart/cartSlice";
 
 function App() {
   const dispatch = useDispatch()
@@ -17,6 +19,7 @@ function App() {
 
   useEffect(() => {
     dispatch(checkLogin(userToken))
+    dispatch(fetchCart());
   }, [])
 
   return (
@@ -27,6 +30,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </div>
   );
