@@ -54,7 +54,9 @@ const Navbar = () => {
             :
             <>
               <div className='flex flex-row items-center gap-2'>
-                <p>Cart {cartsGlobal.length}</p>
+                <Link to='/cart'>
+                  <p>Cart {cartsGlobal.length}</p>
+                </Link>
                 <img
                   src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
                   className='w-8 object-cover border border-gray-500 rounded-full cursor-pointer' />

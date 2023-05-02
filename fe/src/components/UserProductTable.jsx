@@ -12,6 +12,13 @@ function UserProductTable() {
   const userToken = localStorage.getItem('user_token')
   const userGlobal = useSelector(state => state.user.user)
 
+  function formatRupiah(number) {
+    return number.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+  }
+
   const fetchUserProducts = async () => {
     try {
       const response = await axios.get('http://localhost:5500/products/user/', {
@@ -88,7 +95,7 @@ function UserProductTable() {
             {userProducts.map((product, index) => (
               <tr key={product.product_id} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
                 <td className="border border-gray-300 p-2">{product.product_name}</td>
-                <td className="border border-gray-300 p-2">{product.price}</td>
+                <td className="border border-gray-300 p-2">{formatRupiah(product.price)}</td>
                 <td className="border border-gray-300 p-2">{product.image}</td>
                 <td className="border border-gray-300 p-2">{product.description}</td>
                 <td className="border border-gray-300 p-2">{product.active ? 'Aktif' : 'Tidak Aktif'}</td>

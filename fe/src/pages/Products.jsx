@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, ButtonGroup, Divider, Image } from '@chakra-ui/react'
-import { Filter, Navbar } from "../components";
+import { Filter } from "../components";
 import { useDispatch } from "react-redux";
 import { addToCart, fetchCart } from "../features/cart/cartSlice";
 
@@ -20,6 +20,13 @@ function Products() {
     setSortBy(sortOrder);
     setPage(1); // Reset page to 1 when filter changes
   };
+
+  function formatRupiah(number) {
+    return number.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+  }
 
   const fetchProducts = async () => {
     let url = `http://localhost:5500/products?page=${page}&limit=${limit}`;
@@ -55,7 +62,7 @@ function Products() {
                 {product.description}
               </Text>
               <Text color='blue.600' fontSize='2xl'>
-                Rp. {product.price}
+                {formatRupiah(product.price)}
               </Text>
             </Stack>
           </CardBody>
@@ -123,7 +130,6 @@ function Products() {
 
   return (
     <>
-      <Navbar />
       <Filter onFilterChange={handleFilterChange} />
       <div className="flex justify-center mt-3">
         <SimpleGrid spacing={4} templateColumns='repeat(3, minmax(250px, 1fr))'>

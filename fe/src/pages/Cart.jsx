@@ -1,21 +1,35 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, removeFromCart } from '../features/cart/cartSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Cart() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const navigate = useNavigate();
+
+  function formatRupiah(number) {
+    return number.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+  }
 
   const handleDelete = (productId) => {
     dispatch(removeFromCart(productId))
+  }
+
+  const handleCheckout = () => {
+    if (cartItems.length > 0) {
+      navigate('/checkout');
+    }
   }
 
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  console.log("Cart Items: ", cartItems);
+  console.log("Cart Items: ", cartItems.length);
 
   return (
     <div className="container mx-auto px-4">
@@ -31,7 +45,7 @@ function Cart() {
               />
               <div>
                 <h2 className="text-lg font-semibold mb-1">{item.name}</h2>
-                <p className="text-gray-600">${item.price}</p>
+                <p className="text-gray-600">{formatRupiah(item.price)}</p>
               </div>
             </div>
             <div className="mt-4 flex flex-row justify-between">
@@ -61,14 +75,13 @@ function Cart() {
         ))}
       </div>
       <div className='flex justify-center'>
-        <Link to="/checkout">
-          <button
-            className="bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 mt-6"
-            disabled={cartItems.length === 0}
-          >
-            Proceed to Checkout
-          </button>
-        </Link>
+        <button
+          className={`bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 mt-6 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed`}
+          disabled={cartItems.length === 0}
+          onClick={handleCheckout}
+        >
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   )

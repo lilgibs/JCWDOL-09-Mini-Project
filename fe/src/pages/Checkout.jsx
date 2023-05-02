@@ -10,6 +10,13 @@ function Checkout() {
     dispatch(fetchCart());
   }, [dispatch]);
 
+  function formatRupiah(number) {
+    return number.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+  }
+
   const handleCheckout = async () => {
     try {
       // Kumpulkan data dari keranjang (cartItems)
@@ -33,24 +40,19 @@ function Checkout() {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-semibold mt-6 mb-4">Checkout</h1>
-      {/* Tampilkan ringkasan pesanan */}
-      {/* Anda bisa menggunakan komponen atau logika yang sama seperti di halaman Cart untuk menampilkan ringkasan pesanan */}
-      {/* Anda juga bisa menambahkan form untuk informasi pengiriman atau metode pembayaran di sini */}
-
-      {/* Tampilkan daftar item di keranjang */}
+    
       <ul>
         {cartItems.map((item) => (
           <li key={item.id_product}>
-            {item.name} - {item.quantity} pcs - ${item.price * item.quantity}
+            {item.name} - {item.quantity} pcs - {formatRupiah(item.price * item.quantity)}
           </li>
         ))}
       </ul>
 
-      {/* Tampilkan total harga */}
       <h2>
-        Total: $
+        Total: 
         {cartItems.reduce(
-          (total, item) => total + item.price * item.quantity,
+          (total, item) => formatRupiah(total + item.price * item.quantity),
           0
         )}
       </h2>
