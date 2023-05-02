@@ -7,6 +7,7 @@ import UserProductTable from '../components/UserProductTable';
 import UserAddProduct from '../components/UserAddProduct';
 import UserCategory from '../components/UserCategories';
 import UserCategories from '../components/UserCategories';
+import UserGrossIncome from '../components/UserGrossIncome';
 
 function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState('products');
@@ -47,7 +48,14 @@ function Dashboard() {
             <UserCategories />
           </div>
         ) : null}
-        
+
+        {selectedComponent === 'income' ? (
+          <div className='flex w-full flex-col '>
+            <h1 className="text-2xl font-bold mt-8 mb-4 text-center">Pendapatan Saya</h1>
+            <UserGrossIncome />
+          </div>
+        ) : null}
+
       </div>
     </>
   );
