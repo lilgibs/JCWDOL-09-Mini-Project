@@ -20,7 +20,19 @@ module.exports = {
 			const offset = (page - 1) * limit;
 			const { id_category, sortBy } = req.query;
 
-			let sql = `select * from products where active = 1 `;
+			let sql = `
+				SELECT
+					products.*,
+					IFNULL(sales.total_sales, 0) as total_sales
+				FROM products
+				LEFT JOIN (
+					SELECT
+						id_product,
+						SUM(quantity) as total_sales
+					FROM transaction_items
+					GROUP BY id_product
+				) AS sales ON products.id = sales.id_product
+				WHERE products.active = 1`;
 
 			if (id_category) {
 				sql += ` AND id_category = ${db.escape(id_category)}`;
@@ -39,6 +51,9 @@ module.exports = {
 				case "name_z_to_a":
 					sql += " ORDER BY name DESC";
 					break;
+				case "most_sold":
+					sql += " ORDER BY total_sales DESC";
+					break;
 				default:
 					break;
 			}
@@ -51,8 +66,8 @@ module.exports = {
 				SELECT COUNT(*) as total 
 				FROM products 
 				WHERE active = 1 
-				${id_category ? `AND id_category = ${db.escape(id_category)}` : ""}`
-			);
+				${id_category ? `AND id_category = ${db.escape(id_category)}` : ""}
+			`);
 			const total = count[0].total;
 
 			res.status(200).send({ data: products, total });
@@ -205,7 +220,7 @@ module.exports = {
 			if (oldProduct.length > 0) {
 				deleteImage(oldProduct[0].image)
 			}
-			
+
 			sql = `DELETE from products where id = ${db.escape(productId)} AND id_user = ${db.escape(idUser)}`
 
 			const result = await query(sql)
