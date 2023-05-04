@@ -5,13 +5,13 @@ import { faHouse, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 function Sidebar({ setSelectedComponent }) {
   return (
-    <div className="bg-gray-100 min-h-screen h-full p-4 flex flex-col justify-between w-60">
+    <div className="bg-teal-500 text-white font-semibold min-h-screen h-full p-4 flex flex-col justify-between w-60">
       <div>
         <ul className="space-y-2">
           <li>
             <button
               onClick={() => setSelectedComponent('products')}
-              className="block px-4 py-2 rounded hover:bg-gray-200 w-full text-left"
+              className="block px-4 py-2 rounded hover:bg-teal-700 w-full text-left"
             >
               Produk
             </button>
@@ -19,7 +19,7 @@ function Sidebar({ setSelectedComponent }) {
           <li>
             <button
               onClick={() => setSelectedComponent('addProduct')}
-              className="block px-4 py-2 rounded hover:bg-gray-200 w-full text-left"
+              className="block px-4 py-2 rounded hover:bg-teal-700 w-full text-left"
             >
               Tambah Produk
             </button>
@@ -27,14 +27,14 @@ function Sidebar({ setSelectedComponent }) {
           <li>
             <button
               onClick={() => setSelectedComponent('categories')}
-              className="block px-4 py-2 rounded hover:bg-gray-200 w-full text-left">
+              className="block px-4 py-2 rounded hover:bg-teal-700 w-full text-left">
               Kategori
             </button>
           </li>
           <li>
             <button
               onClick={() => setSelectedComponent('income')}
-              className="block px-4 py-2 rounded hover:bg-gray-200 w-full text-left">
+              className="block px-4 py-2 rounded hover:bg-teal-700 w-full text-left">
               Pendapatan
             </button>
           </li>
@@ -43,12 +43,12 @@ function Sidebar({ setSelectedComponent }) {
       <div>
         <ul className="space-y-2">
           <li>
-            <Link to='/' className="block px-4 py-2 rounded hover:bg-gray-200">
+            <Link to='/' className="block px-4 py-2 rounded hover:bg-teal-700">
               <FontAwesomeIcon icon={faHouse} /> Main Page
             </Link>
           </li>
           <li>
-            <a href="#" className="block px-4 py-2 rounded hover:bg-gray-200">
+            <a href="#" className="block px-4 py-2 rounded hover:bg-teal-700">
               <FontAwesomeIcon icon={faRightFromBracket} /> Logout
             </a>
           </li>

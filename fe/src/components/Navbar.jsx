@@ -13,6 +13,7 @@ import {
   Button,
   MenuDivider,
 } from '@chakra-ui/react';
+import { logoutUser } from '../features/user/userSlice';
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
@@ -24,6 +25,10 @@ const Navbar = () => {
   const handleClick = () => {
     setToggle(!toggle);
   };
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
+  }
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -81,7 +86,7 @@ const Navbar = () => {
                   <MenuItem>Transaction</MenuItem>
                 </Link>
                 <MenuDivider />
-                <MenuItem onClick={() => {/* Add your logout function here */ }}>
+                <MenuItem onClick={handleLogout}>
                   Logout
                 </MenuItem>
               </MenuList>

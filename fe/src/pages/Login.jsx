@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { loginUser } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +19,6 @@ function Login() {
       .email("Format Email Salah")
       .required("Email Tidak Boleh Kosong"),
     password: Yup.string()
-      .min(8, "Password Harus Lebih dari 8 karakter")
       .required("Password Tidak Boleh Kosong"),
   });
 
@@ -40,48 +41,57 @@ function Login() {
 
   return (
     <div>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={LoginSchema}
-          onSubmit={(values) => {
-            handleLoginUser(values)
-          }}
-        >
-          {(props) => {
-            // console.log(props);
-            return (
-              <div className="w-1/3 mx-auto my-9 bg-blue-100 p-6 rounded-md">
-                <p className="text-xl font-bold text-center mb-6">Page Login</p>
-                <Form>
-                  <div className="flex flex-col">
-                    <label htmlFor="email">Email</label>
-                    <Field type="text" name="email" className="border-2" />
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={LoginSchema}
+        onSubmit={(values) => {
+          handleLoginUser(values)
+        }}
+      >
+        {(props) => {
+          // console.log(props);
+          return (
+            <div className="w-1/3 mx-auto my-9 border p-6 rounded-sm shadow-md">
+              <Form>
+                <div className="flex flex-col py-3 items-center">
+                  <div className="bg-slate-50 text-center p-3 rounded-md w-3/4 mb-10">
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      className="text-5xl text-teal-400"
+                    />
+                    <p className="font-semibold text-teal-500 text-lg">User Login</p>
+                  </div>
+                  <div className="flex flex-col w-full mb-3">
+                    <label htmlFor="email" className="font-semibold">Email</label>
+                    <Field type="text" name="email" className="border rounded-sm py-1" />
                     <ErrorMessage
                       component="div"
                       name="email"
-                      style={{ color: "red" }}
+                      className="text-teal-500 text-sm"
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <label htmlFor="password">Password</label>
-                    <Field type="password" name="password" className="border-2" />
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="password" className="font-semibold">Password</label>
+                    <Field type="password" name="password" className="border rounded-sm py-1" />
                     <ErrorMessage
                       component="div"
                       name="password"
-                      style={{ color: "red" }}
+                      className="text-teal-500 text-sm"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="bg-blue-500 py-2 px-3 rounded-md mt-10"
+                    className="bg-teal-400 py-2 px-3 rounded-sm w-full mt-10 text-white font-semibold"
                   >
-                    Submit
+                    Login
                   </button>
-                </Form>
-              </div>
-            );
-          }}
-        </Formik>
+
+                </div>
+              </Form>
+            </div>
+          );
+        }}
+      </Formik>
     </div>
   );
 }

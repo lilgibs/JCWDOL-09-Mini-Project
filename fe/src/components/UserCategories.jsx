@@ -101,14 +101,14 @@ function UserCategories() {
                 <td className="border border-gray-300 p-2">{category.name}</td>
                 <td className="border border-gray-300 p-2">
                   <button
-                    className="bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600 mr-2"
+                    className="bg-teal-500 text-white py-1 px-2 rounded-md hover:bg-teal-600 mr-2"
                     onClick={() => handleEditClick(category)}
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => categoryDelete(category.id)}
-                    className="bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600"
+                    className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
                   >
                     Delete
                   </button>
@@ -130,7 +130,7 @@ function UserCategories() {
                 placeholder="Nama Kategori"
               />
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2"
+                className="bg-teal-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2"
                 type="submit"
               >
                 Tambah

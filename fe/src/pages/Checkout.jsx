@@ -2,14 +2,22 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, checkout } from "../features/cart/cartSlice";
 import { formatRupiah } from "../utils/formatRupiah";
+import { useNavigate } from "react-router-dom";
 
 function Checkout() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate('/');
+    }
+  }, [cartItems, navigate]);
 
   const handleCheckout = async () => {
     try {
@@ -63,6 +71,7 @@ function Checkout() {
       <button
         className="bg-teal-400 text-white w-full py-3 font-semibold hover:bg-teal-500"
         onClick={handleCheckout}
+        disabled={cartItems.length === 0}
       >
         Confirm Order
       </button>

@@ -7,6 +7,7 @@ function Cart() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
   const navigate = useNavigate();
+  const userToken = localStorage.getItem('user_token')
 
   function formatRupiah(number) {
     return number.toLocaleString('id-ID', {
@@ -24,6 +25,12 @@ function Cart() {
       navigate('/checkout');
     }
   }
+
+  useEffect(() => {
+    if (!userToken) {
+      navigate("/login")
+    }
+  },[])
 
   useEffect(() => {
     dispatch(fetchCart());

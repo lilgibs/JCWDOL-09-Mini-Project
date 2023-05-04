@@ -72,3 +72,10 @@ export function checkLogin(token) {
     }
   };
 }
+
+export function logoutUser(){
+  return(dispatch) => {
+    localStorage.removeItem('user_token')
+    dispatch(resetUser())
+  }
+}

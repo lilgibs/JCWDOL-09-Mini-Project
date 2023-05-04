@@ -103,13 +103,13 @@ function UserProductTable() {
                 <td className="border border-gray-300 p-2">
                   <button
                     onClick={() => handleEditClick(product)}
-                    className="bg-cyan-500 text-white py-1 px-2 rounded-md hover:bg-cyan-600 mr-2"
+                    className="bg-teal-500 font-semibold text-white py-1 px-2 rounded-md hover:bg-teal-600 mr-2"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deleteProduct(product.product_id)}
-                    className="bg-rose-500 text-white py-1 px-2 rounded-md hover:bg-rose-600"
+                    className="bg-red-500 font-semibold text-white py-1 px-2 rounded-md hover:bg-red-600"
                   >
                     Delete
                   </button>

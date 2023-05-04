@@ -41,6 +41,12 @@ export function fetchCart() {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("user_token");
+
+      if (!token) {
+        console.log("User not logged in");
+        return;
+      }
+
       let response = await axios.get("http://localhost:5500/carts", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,6 +64,12 @@ export function addToCart(data) {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("user_token");
+
+      if (!token) {
+        console.log("User not logged in. Cannot add item to cart!");
+        return;
+      }
+
       let response = await axios.post("http://localhost:5500/carts", data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,6 +87,7 @@ export function removeFromCart(productId) {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("user_token");
+
       let response = await axios.delete(`http://localhost:5500/carts/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
