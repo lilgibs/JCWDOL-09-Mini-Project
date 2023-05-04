@@ -59,11 +59,12 @@ function Filter({ onFilterChange }) {
           <option value="price_low_to_high">Harga terendah</option>
           <option value="name_a_to_z">Nama A - Z</option>
           <option value="name_z_to_a">Nama Z - A</option>
+          <option value="most_sold">Terlaris</option>
         </select>
       </div>
       <div>
         <button
-          className="bg-emerald-500 text-white font-semibold p-2 px-4 rounded-md hover:bg-emerald-600 transition duration-100"
+          className="bg-teal-400 text-white font-semibold p-2 px-4 rounded-sm hover:bg-teal-500 transition duration-100"
           onClick={handleSubmit}
         >
           Submit
