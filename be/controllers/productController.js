@@ -21,21 +21,17 @@ module.exports = {
 			const { id_category, sortBy } = req.query;
 
 			let sql = `
-				SELECT
+				SELECT 
 					products.*,
-					IFNULL(sales.total_sales, 0) as total_sales
+					IFNULL(SUM(transaction_items.quantity), 0) as total_sales
 				FROM products
-				LEFT JOIN (
-					SELECT
-						id_product,
-						SUM(quantity) as total_sales
-					FROM transaction_items
-					GROUP BY id_product
-				) AS sales ON products.id = sales.id_product
-				WHERE products.active = 1`;
+				LEFT JOIN transaction_items ON products.id = transaction_items.id_product
+				WHERE products.active = 1
+				GROUP BY products.id
+				`;
 
 			if (id_category) {
-				sql += ` AND id_category = ${db.escape(id_category)}`;
+				sql += ` HAVING id_category = ${db.escape(id_category)}`;
 			}
 
 			switch (sortBy) {
