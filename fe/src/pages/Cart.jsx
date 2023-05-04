@@ -32,8 +32,8 @@ function Cart() {
   console.log("Cart Items: ", cartItems.length);
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-semibold mt-6 mb-4">Cart</h1>
+    <div className="container mx-auto w-3/4">
+      <h1 className="text-xl font-bold mt-6 mb-6 text-center">CART</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {cartItems.map((item) => (
           <div key={item.id_product} className="border rounded-md p-4">
@@ -76,7 +76,7 @@ function Cart() {
       </div>
       <div className='flex justify-center'>
         <button
-          className={`bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 mt-6 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed`}
+          className={`bg-teal-400 text-white py-2 px-4 rounded-sm font-semibold hover:bg-teal-500 mt-6 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed`}
           disabled={cartItems.length === 0}
           onClick={handleCheckout}
         >

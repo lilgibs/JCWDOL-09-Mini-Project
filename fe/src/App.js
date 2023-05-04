@@ -12,6 +12,7 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import { fetchCart } from "./features/cart/cartSlice";
 import Checkout from "./pages/Checkout";
+import Transaction from "./pages/Transaction";
 
 function App() {
   const dispatch = useDispatch()
@@ -35,6 +36,7 @@ function App() {
         <Route path="/" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/transaction" element={<Transaction />} />
       </Routes>
     </div>
   );

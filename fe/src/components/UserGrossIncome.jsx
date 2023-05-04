@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { formatRupiah } from '../utils/formatRupiah';
 
 function UserGrossIncome() {
   const [grossIncomeData, setGrossIncomeData] = useState([]);
@@ -19,16 +20,9 @@ function UserGrossIncome() {
 
   const userToken = localStorage.getItem('user_token');
 
-  function formatRupiah(number) {
-    return number.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
-  }
-
   const fetchData = async () => {
     try {
-      let response = await axios.get(`http://localhost:5500/statistic`, {
+      let response = await axios.get(`http://localhost:5500/statistic/gross-income`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

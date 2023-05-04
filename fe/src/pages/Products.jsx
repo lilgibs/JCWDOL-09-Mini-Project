@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, ButtonGroup, Divider, Image } from '@chakra-ui/react'
+import { Card, Flex, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, ButtonGroup, Divider, Image } from '@chakra-ui/react'
 import { Filter } from "../components";
 import { useDispatch } from "react-redux";
 import { addToCart, fetchCart } from "../features/cart/cartSlice";
+import { formatRupiah } from "../utils/formatRupiah";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(6)
+  const [limit, setLimit] = useState(3)
   const [maxPage, setMaxPage] = useState(0)
   const [idCategory, setIdCategory] = useState(null);
   const [sortBy, setSortBy] = useState(null);
@@ -20,13 +21,6 @@ function Products() {
     setSortBy(sortOrder);
     setPage(1); // Reset page to 1 when filter changes
   };
-
-  function formatRupiah(number) {
-    return number.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
-  }
 
   const fetchProducts = async () => {
     let url = `http://localhost:5500/products?page=${page}&limit=${limit}`;
@@ -49,7 +43,7 @@ function Products() {
   const renderProducts = () => {
     return products.map((product) => {
       return (
-        <Card maxW='sm'>
+        <Card maxW='xs'>
           <CardBody>
             <Image
               src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
@@ -61,24 +55,23 @@ function Products() {
               <Text>
                 {product.description}
               </Text>
-              <Text color='blue.600' fontSize='2xl'>
+              <p className="text-teal-400 font-semibold text-xl">
                 {formatRupiah(product.price)}
+              </p>
+              <Text fontSize='sm' align='right' as='i'>
+                {product.total_sales} Terjual
               </Text>
             </Stack>
           </CardBody>
           <Divider />
           <CardFooter>
             <ButtonGroup spacing='2'>
-              <button className="bg-emerald-500 text-white p-2 rounded-md font-semibold hover:bg-emerald-600">
-                Buy now
-              </button>
-              <Button
-                variant='ghost'
-                colorScheme='blue'
+              <button
+                className=" bg-teal-400 text-white px-2 py-1 rounded-sm font-semibold hover:bg-teal-500"
                 onClick={() => handleAddTocart(product)}
               >
                 Add to cart
-              </Button>
+              </button>
             </ButtonGroup>
           </CardFooter>
         </Card>
@@ -92,25 +85,27 @@ function Products() {
 
   const renderPagination = () => {
     return (
-      <div className="flex justify-center mt-4">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-          onClick={() => handlePageClick(Math.max(page - 1))}
+      <Flex justifyContent="center" mt="4">
+        <Button
+          colorScheme="teal"
+          onClick={() => handlePageClick(Math.max(page - 1, 1))}
           disabled={page === 1}
+          mr="2"
         >
           Prev
-        </button>
-        <span className="text-blue-500 px-4 py-2">
+        </Button>
+        <Text px="4" py="2">
           {page} of {maxPage}
-        </span>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2"
+        </Text>
+        <Button
+          colorScheme="teal"
           onClick={() => handlePageClick(Math.min(page + 1, maxPage))}
           disabled={page === maxPage}
+          ml="2"
         >
           Next
-        </button>
-      </div>
+        </Button>
+      </Flex>
     );
   };
 
@@ -130,13 +125,12 @@ function Products() {
 
   return (
     <>
-      <Filter onFilterChange={handleFilterChange} />
-      <div className="flex justify-center mt-3">
-        <SimpleGrid spacing={4} templateColumns='repeat(3, minmax(250px, 1fr))'>
-          {renderProducts()}
-        </SimpleGrid>
-
-      </div>
+       <Filter onFilterChange={handleFilterChange} />
+      <Flex justifyContent="center" mt="3">
+          <SimpleGrid spacing={10} templateColumns='repeat(3, minmax(250px, 1fr))'>
+            {renderProducts()}
+          </SimpleGrid>
+      </Flex>
       {renderPagination()}
     </>
   );

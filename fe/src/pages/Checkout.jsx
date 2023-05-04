@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, checkout } from "../features/cart/cartSlice";
+import { formatRupiah } from "../utils/formatRupiah";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -9,13 +10,6 @@ function Checkout() {
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
-
-  function formatRupiah(number) {
-    return number.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
-  }
 
   const handleCheckout = async () => {
     try {
@@ -38,27 +32,36 @@ function Checkout() {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-semibold mt-6 mb-4">Checkout</h1>
-    
-      <ul>
-        {cartItems.map((item) => (
-          <li key={item.id_product}>
-            {item.name} - {item.quantity} pcs - {formatRupiah(item.price * item.quantity)}
-          </li>
-        ))}
-      </ul>
+    <div className="container mx-auto px-4 " style={{ width: '700px' }}>
+      <h1 className="text-xl font-bold mt-6 mb-6 text-center">CHECKOUT</h1>
 
-      <h2>
-        Total: 
-        {cartItems.reduce(
-          (total, item) => formatRupiah(total + item.price * item.quantity),
-          0
-        )}
-      </h2>
+      <div className="flex flex-col bg-slate-50 mb-1 p-4 gap-2">
+        {cartItems.map((item) => (
+          <div className="flex justify-between"> {/* <-- Hapus w-full di sini */}
+            <div className="flex flex-row"> {/* <-- Hapus justify-between di sini */}
+              <p className="font-semibold">{item.name}</p>
+            </div>
+            <div className="flex flex-col justify-between"> {/* <-- Tambahkan justify-between di sini */}
+              <p>{formatRupiah(item.price * item.quantity)}</p>
+              <p className="text-sm text-right">{item.quantity} item(s)</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+
+      <div className="flex justify-between bg-slate-50 mb-1 p-4">
+        <p className="font-semibold">Total Amount</p>
+        <p>
+          {formatRupiah(cartItems.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+          ))}
+        </p>
+      </div>
 
       <button
-        className="bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 mt-6"
+        className="bg-teal-400 text-white w-full py-3 font-semibold hover:bg-teal-500"
         onClick={handleCheckout}
       >
         Confirm Order
