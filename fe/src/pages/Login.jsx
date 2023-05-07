@@ -6,9 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { loginUser } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import Alert from "../components/Alert";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const dispatch = useDispatch();
   const userGlobal = useSelector((state) => state.user.user)
   const navigate = useNavigate()
@@ -23,7 +26,16 @@ function Login() {
   });
 
   const handleLoginUser = async (values) => {
-    dispatch(loginUser(values))
+    try {
+      await dispatch(loginUser(values));
+      setError(null);
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Error logging in");
+      }
+    }
   }
 
   useEffect(() => {
@@ -41,6 +53,14 @@ function Login() {
 
   return (
     <div>
+      {error && (
+        <Alert
+          message={error}
+          type="error"
+          onClose={() => setError(null)}
+        />
+      )}
+      
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
@@ -85,7 +105,6 @@ function Login() {
                   >
                     Login
                   </button>
-
                 </div>
               </Form>
             </div>

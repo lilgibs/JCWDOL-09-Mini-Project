@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from 'axios'
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Alert from "../components/Alert";
 
 // import { useDispatch } from "react-redux";
 
 function Register() {
+  const [message, setMessage] = useState(null)
 
-
-  const LoginSchema = Yup.object().shape({
+  const RegisterSchema = Yup.object().shape({
     name: Yup.string().required("Nama tidak boleh kosong"),
     username: Yup.string().required("Username tidak boleh kosong"),
     email: Yup.string()
@@ -22,19 +23,31 @@ function Register() {
       .required("Password tidak boleh kosong"),
   });
 
-  const registerUser = async (values) => {
+  const registerUser = async (values, resetForm) => {
     try {
-      // console.log(values)
       const response = await axios.post('http://localhost:5500/auth/register', values)
       console.log(response.data)
-      alert(response.data.message)
+      setMessage({ type: 'success', text: response.data.message })
+      resetForm()
     } catch (error) {
-      console.log(error.response.data)
+      console.error(error);
+      if (error.response && error.response.data.message) {
+        setMessage({ type: 'error', text: error.response.data.message });
+      } else {
+        setMessage({ type: 'error', text: "Error registering user" });
+      }
     }
   }
 
   return (
     <div>
+      {message && (
+        <Alert
+          message={message.text}
+          type={message.type}
+          onClose={() => setMessage(null)}
+        />
+      )}
       <Formik
         initialValues={{
           username: "",
@@ -43,9 +56,9 @@ function Register() {
           name: "",
           password: "",
         }}
-        validationSchema={LoginSchema}
-        onSubmit={(values) => {
-          registerUser(values)
+        validationSchema={RegisterSchema}
+        onSubmit={(values, { resetForm }) => {
+          registerUser(values, resetForm)
         }}
       >
         {(props) => {

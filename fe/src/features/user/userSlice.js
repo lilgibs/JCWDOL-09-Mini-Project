@@ -35,13 +35,13 @@ export function loginUser(values) {
   return (
     async (dispatch) => {
       try {
-        console.log(values)
         const response = await axios.post('http://localhost:5500/auth/login', values)
         console.log(response)
         dispatch(setUser(response.data.data))
         localStorage.setItem('user_token', response.data.token)
       } catch (error) {
-        console.log(error)
+        console.log(error);
+        throw error;
       }
     }
 
@@ -75,8 +75,8 @@ export function checkLogin(token) {
   };
 }
 
-export function logoutUser(){
-  return(dispatch) => {
+export function logoutUser() {
+  return (dispatch) => {
     localStorage.removeItem('user_token')
     dispatch(resetUser())
   }
