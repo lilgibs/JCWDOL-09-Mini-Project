@@ -62,6 +62,7 @@ export function checkLogin(token) {
       );
       console.log(response);
       dispatch(setUser(response.data.data));
+      return true;
     } catch (error) {
       if (error.response && error.response.data.message === "Access Denied: Token expired") {
         console.log(error.response.data.message);
@@ -69,6 +70,7 @@ export function checkLogin(token) {
         console.log(error.response.data.message);
       }
       localStorage.removeItem("user_token");
+      return false;
     }
   };
 }

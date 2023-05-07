@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, removeFromCart } from '../features/cart/cartSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function Cart() {
   const dispatch = useDispatch();
@@ -30,11 +32,18 @@ function Cart() {
     if (!userToken) {
       navigate("/login")
     }
-  },[])
+  },[localStorage.getItem("user_token")])
 
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
+
+  useEffect(() => {
+    const userToken = localStorage.getItem("user_token");
+    if (!userToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   console.log("Cart Items: ", cartItems.length);
 
@@ -43,7 +52,7 @@ function Cart() {
       <h1 className="text-xl font-bold mt-6 mb-6 text-center">CART</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {cartItems.map((item) => (
-          <div key={item.id_product} className="border rounded-md p-4">
+          <div key={item.id_product} className="border rounded-md p-4 shadow-md">
             <div className="flex items-center">
               <img
                 src={`http://localhost:5500/${item.image}`}
@@ -74,7 +83,7 @@ function Cart() {
                   className=' bg-red-500 text-white py-1 px-2 rounded-md font-semibold hover:bg-red-600'
                   onClick={() => handleDelete(item.id_product)}
                 >
-                  Remove
+                  <FontAwesomeIcon icon={faTrash} /> Remove
                 </button>
               </div>
             </div>

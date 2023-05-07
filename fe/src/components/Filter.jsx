@@ -39,7 +39,7 @@ function Filter({ onFilterChange }) {
       <div className="flex flex-row items-center gap-2">
         <p className="font-medium">Kategori</p>
         <select
-          className="border border-gray-300 p-2 rounded-md"
+          className="border p-2 rounded-md bg-white"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -48,9 +48,9 @@ function Filter({ onFilterChange }) {
         </select>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <p className="font-medium">Urutkan</p>
+        <p className="font-medium text">Urutkan</p>
         <select
-          className="border border-gray-300 p-2 rounded-md"
+          className="border border-gray-300 p-2 rounded-md bg-white"
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
         >

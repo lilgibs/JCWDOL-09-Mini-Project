@@ -11,11 +11,29 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
 } from "@chakra-ui/react";
+import axios from 'axios';
 
 function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
   // State untuk menyimpan nilai form
   const [updatedProduct, setUpdatedProduct] = useState({})
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    try {
+      const userToken = localStorage.getItem("user_token");
+      const response = await axios.get("http://localhost:5500/categories/user", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      setCategories(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
 
   // Perbarui state saat input berubah
   const handleInputChange = (e) => {
@@ -45,6 +63,10 @@ function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     setUpdatedProduct(product)
@@ -100,11 +122,18 @@ function UserProductEditModal({ isOpen, onClose, product, onUpdate }) {
                 />
               </FormControl><FormControl mt={4}>
                 <FormLabel>Kategori</FormLabel>
-                <Input
-                  name='category_id'
+                <Select
+                  name="category_id"
                   value={updatedProduct.category_id}
                   onChange={handleInputChange}
-                />
+                >
+                  <option value="">Pilih Kategori Produk</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
               </FormControl>
             </>
           )}

@@ -2,6 +2,8 @@ import { useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import UserCategoryEditModal from './UserCategoryEditModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function UserCategories() {
   const [categories, setCategories] = useState([]);
@@ -104,13 +106,13 @@ function UserCategories() {
                     className="bg-teal-500 text-white py-1 px-2 rounded-md hover:bg-teal-600 mr-2"
                     onClick={() => handleEditClick(category)}
                   >
-                    Edit
+                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
                   </button>
                   <button
                     onClick={() => categoryDelete(category.id)}
                     className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
                   >
-                    Delete
+                    <FontAwesomeIcon icon={faTrash} /> Delete
                   </button>
                 </td>
               </tr>

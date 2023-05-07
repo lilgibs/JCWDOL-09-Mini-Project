@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { formatRupiah } from '../utils/formatRupiah';
 
 const Transaction = () => {
   const [transactions, setTransactions] = useState([]);
@@ -79,7 +80,7 @@ const Transaction = () => {
               <tr key={transaction.transaction_id} className={`${index % 2 === 0 ? 'bg-gray-100' : ''}`}>
                 <td className="py-2 px-4">{transaction.transaction_id}</td>
                 <td className="py-2 px-4">{transaction.date}</td>
-                <td className="py-2 px-4">{transaction.total_amount}</td>
+                <td className="py-2 px-4">{formatRupiah(transaction.total_amount)}</td>
                 <td className="py-2 px-4">
                   <ul className="list-disc list-inside">
                     {transaction.items.map((item) => (
