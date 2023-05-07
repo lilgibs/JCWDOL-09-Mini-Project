@@ -55,7 +55,7 @@ module.exports = {
         JOIN transaction_items ON transactions.id = transaction_items.id_transaction
         JOIN products ON transaction_items.id_product = products.id
         WHERE
-          products.id_user = ${db.escape(userId)} AND
+          transactions.id_user = ${db.escape(userId)} AND
           DATE(transactions.transaction_date) BETWEEN ${db.escape(start)} AND ${db.escape(end)}
         GROUP BY transactions.id
         ORDER BY DATE(transactions.transaction_date) DESC
