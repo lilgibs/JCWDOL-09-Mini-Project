@@ -11,6 +11,14 @@ function AddProductForm() {
 
   const userToken = localStorage.getItem("user_token");
 
+  const resetForm = () => {
+    setProductName("");
+    setProductPrice("");
+    setProductDescription("");
+    setProductCategory("");
+    setProductImage(null);
+  }
+
   const addProduct = async (productData) => {
     const config = {
       headers: {
@@ -52,6 +60,7 @@ function AddProductForm() {
       productData.append("image", productImage);
 
       await addProduct(productData);
+      resetForm();
     } catch (error) {
       console.error("Error submitting form:", error);
     }
